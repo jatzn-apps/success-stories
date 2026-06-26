@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profit Flywheel — Student Success Stories</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0d0b; --bg-card:#171510; --bg-card-h:#201c14; --bg-elev:#13110d;
+    --gold:#d4af37; --gold-lt:#e8cd7e; --gold-dim:#b9962f; --brown:#7a5f2e; --brown-dk:#3a2e16;
+    --line:rgba(212,175,55,.13); --line2:rgba(212,175,55,.30);
+    --text:#f3efe6; --muted:rgba(243,239,230,.48); --muted2:rgba(243,239,230,.30);
+    --green:#5cc07d; --green-dk:#2c5f3e; --red:#e0635f; --red-dk:#5c2826;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:600;line-height:1.15}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+  .seclabel{font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:18px}
+  .seclabel .ct{color:var(--muted2);font-weight:600;letter-spacing:1px}
+
+  .hero{text-align:center;padding:60px 0 30px}
+  .brand{color:var(--gold);font-size:13px;letter-spacing:6px;text-transform:uppercase;font-weight:700;margin-bottom:22px}
+  .hero h1{font-size:52px;font-weight:700;color:#fff;letter-spacing:.5px}
+  .hero .sub{color:var(--muted);font-size:16.5px;margin-top:14px;letter-spacing:.3px}
+  .rule{max-width:1120px;margin:38px auto 0;padding:0 28px}
+  .rule::after{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
+
+  .filters{padding:34px 0 6px}
+  .filter-row{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{border:1px solid var(--line);background:var(--bg-card);color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:9px 16px;border-radius:30px;cursor:pointer;transition:all .15s}
+  .chip:hover{border-color:var(--line2);color:var(--text)}
+  .chip.active{background:linear-gradient(135deg,var(--gold-dim),var(--gold-lt));color:#241a06;border-color:transparent;font-weight:600}
+  .chip.active .ct{color:#241a06;opacity:.65}
+  .ct{color:var(--gold);font-weight:700;margin-left:6px;font-size:12px}
+
+  .gridwrap{padding:34px 0 30px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+  .card{background:var(--bg-card);border:1px solid var(--line);border-radius:16px;padding:22px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;position:relative}
+  .card:hover{background:var(--bg-card-h);border-color:var(--line2);transform:translateY(-3px)}
+  .card-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .avatar{width:50px;height:50px;border-radius:13px;background:linear-gradient(140deg,#caa23f 0%,#e8cd7e 52%,#a9792b 100%);color:#2b2008;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:16px;flex-shrink:0;letter-spacing:.5px}
+  .ci{flex:1;min-width:0}
+  .card-name{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#fff}
+  .card-id{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .arrow{color:var(--muted2);font-size:18px;transition:all .18s;flex-shrink:0}
+  .card:hover .arrow{color:var(--gold);transform:translateX(3px)}
+  .speed{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--gold-lt);border:1px solid var(--line);background:rgba(212,175,55,.06);border-radius:20px;padding:5px 12px;margin-bottom:15px;align-self:flex-start;letter-spacing:.2px}
+  .result-band{background:var(--bg-elev);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:15px}
+  .result-band .big{font-family:'Playfair Display',serif;font-size:25px;font-weight:700;color:#fff;line-height:1.1}
+  .result-band .big .g{color:var(--green)}
+  .result-band .small{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .tagrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+  .tag{font-size:11px;color:var(--gold-lt);background:rgba(212,175,55,.08);border:1px solid var(--line);border-radius:6px;padding:4px 9px;font-weight:500}
+
+  .overlay{position:fixed;inset:0;background:rgba(5,5,4,.74);backdrop-filter:blur(4px);z-index:100;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px}
+  .overlay.show{display:flex}
+  .modal{background:var(--bg-card);max-width:680px;width:100%;border:1px solid var(--line2);border-radius:20px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.6);animation:pop .22s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .m-hero{background:radial-gradient(ellipse at top left,#251d0f 0%,#100f0c 72%);padding:30px 34px;position:relative;border-bottom:1px solid var(--line2)}
+  .m-close{position:absolute;top:18px;right:18px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line2);background:rgba(0,0,0,.3);color:var(--gold-lt);font-size:18px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s}
+  .m-close:hover{background:var(--gold);color:#241a06;border-color:var(--gold)}
+  .m-top{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+  .m-avatar{width:60px;height:60px;border-radius:15px;background:linear-gradient(140deg,#caa23f 0%,#e8cd7e 52%,#a9792b 100%);color:#2b2008;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;flex-shrink:0;letter-spacing:.5px}
+  .m-name{font-family:'Playfair Display',serif;font-size:25px;font-weight:600;color:#fff}
+  .m-id{font-size:13px;color:var(--muted);margin-top:3px}
+  .m-result{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .m-result .big{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--green);line-height:1}
+  .m-result .sub{font-size:14px;color:var(--muted)}
+  .m-speed{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;letter-spacing:.3px;color:var(--gold-lt);border:1px solid var(--line2);border-radius:20px;padding:5px 13px}
+  .m-body{padding:30px 34px 34px}
+  .block{margin-bottom:20px;padding-left:14px;border-left:2px solid var(--line)}
+  .block.fear{border-left-color:var(--red)}
+  .block.changed{border-left-color:var(--green)}
+  .block .lbl{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;color:var(--gold);margin-bottom:7px}
+  .block.fear .lbl{color:var(--red)}
+  .block.changed .lbl{color:var(--green)}
+  .block p{font-size:15px;color:#e7e1d5;line-height:1.65}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:24px 0}
+  .fact{background:var(--bg-elev);padding:14px 16px}
+  .fact .fl{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .fact .fv{font-size:14.5px;font-weight:600;color:#fff;margin-top:4px}
+  .fact.win .fv{color:var(--green)}
+  .quote{background:var(--bg-elev);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:22px 24px;margin:24px 0;position:relative}
+  .quote .mark{font-family:'Playfair Display',serif;color:var(--gold);font-size:52px;line-height:0;position:absolute;top:26px;left:14px;opacity:.45}
+  .quote p{font-family:'Playfair Display',serif;font-size:19px;font-style:italic;font-weight:500;color:#fff;padding-left:30px;line-height:1.4}
+  .watch{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--gold-dim),var(--gold-lt));color:#241a06;text-decoration:none;font-family:'Inter',sans-serif;font-weight:700;font-size:15px;padding:16px;border-radius:12px;letter-spacing:.3px;transition:filter .15s,transform .1s}
+  .watch:hover{filter:brightness(1.08)}
+  .watch:active{transform:scale(.99)}
+  .play{width:24px;height:24px;border-radius:50%;background:#241a06;color:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-size:11px;padding-left:2px}
+
+  .empty{text-align:center;padding:70px 0;color:var(--muted);font-size:15px}
+  .foot{text-align:center;padding:46px 0 56px;border-top:1px solid var(--line);margin-top:20px}
+  .foot h2{font-size:27px;font-weight:500;color:#fff}
+  .foot h2 .g{color:var(--gold)}
+
+  @media(max-width:640px){.hero h1{font-size:38px}.grid{grid-template-columns:1fr}.facts{grid-template-columns:1fr}.m-result .big{font-size:30px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brand">Profit Flywheel Inner Circle</div>
+  <h1>Student Success Stories</h1>
+  <div class="sub">Journeys, results &amp; video walkthroughs</div>
+</header>
+<div class="rule"></div>
+
+<section class="filters"><div class="wrap">
+  <div class="seclabel">Filter by situation</div>
+  <div class="filter-row" id="filterRow"></div>
+</div></section>
+
+<main class="gridwrap"><div class="wrap">
+  <div class="seclabel">Student stories <span class="ct" id="gridCount"></span></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">No stories match those filters — try fewer.</div>
+</div></main>
+
+<footer class="foot"><div class="wrap">
+  <h2>If they can do it, <span class="g">why not you?</span></h2>
+</div></footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+const STUDENTS = [
+  {
+    id: "kamelia", name: "Kamelia", initials: "K",
+    identity: "Moved from Bulgaria · Parent · ex-eBay & Shopify",
+    headline: "Crossed £100K", sub: "now ~£15K/mo · replaced a UK salary",
+    speed: "~5 months to £100K",
+    tags: ["moved", "parent", "ecom", "milestone"],
+    before: "An eBay seller and Shopify dabbler from Bulgaria with a transport-engineering background — and zero Amazon experience. She'd spent years stuck in an employee mindset.",
+    fear: "She wasn't sure she could ever switch from an \"employee mind\" to an \"entrepreneur mind\" — it had taken her years just to start believing it was possible.",
+    changed: "Systemised, step-by-step lessons she could rewind whenever she missed something. She stayed consistent and patient, scaling slow and safe with high-profit items.",
+    facts: { capital: "~£3K in stock", time: "Alongside family life", model: "Wholesale", result: "£100K crossed, ~£15K/mo" },
+    quote: "If you really want to do something, you're going to find a way.",
+    match: "For the prospect who's tried other e-commerce and is ready to commit to one model properly.",
+    video: "https://youtu.be/YjMB49iZsjI"
+  },
+  {
+    id: "dev", name: "Dev Patel", initials: "D",
+    identity: "19 years old · at college · total beginner",
+    headline: "£112K in under 12 months", sub: "biggest month £28K · 30–35% ROI",
+    speed: "£28K month by month 6–7",
+    tags: ["young", "beginner"],
+    before: "19, at college for a business degree, working a job at an amusement park he always hated. Amazon was completely new to him.",
+    fear: "He almost didn't start because everyone said Amazon was \"too saturated\" — that the window had already closed.",
+    changed: "Daily product research and reverse-sourcing, plus building genuine relationships with local suppliers so he always had products to send.",
+    facts: { capital: "Started small", time: "Around college", model: "Wholesale / arbitrage", result: "£112K in <12 months" },
+    quote: "Doing is way better than thinking. So it's better to take action.",
+    match: "For the young prospect who thinks they've started too late or missed the boat.",
+    video: "https://youtu.be/afj_S2ZWnh8"
+  },
+  {
+    id: "ankit", name: "Ankit", initials: "A",
+    identity: "7–4 factory job · Parent · total beginner",
+    headline: "£14K in month 4", sub: "from £0 · alongside a full-time job",
+    speed: "First sale to £14K in 4 months",
+    tags: ["job", "parent", "beginner"],
+    before: "A double-glazing manufacturer working 7am–4pm, unhappy with the return he was getting on his time, with a family to look after.",
+    fear: "He knew nothing about FBA, and the free videos alone left the knowledge scattered and confusing — he didn't know how to piece it together.",
+    changed: "He upgraded from Launchpad to Profit Flywheel for hands-on 1:1 support. Krutik launched his products and got his inactive listings reinstated with Amazon support.",
+    facts: { capital: "£1K", time: "Evenings after work", model: "Wholesale bundles", result: "£14K by month 4" },
+    quote: "Short-term hard work is what gives you the long-term reward.",
+    match: "For the hands-on worker who'll out-work everyone — they just need the path shown to them.",
+    video: "https://youtu.be/J13uJMUIUuI"
+  },
+  {
+    id: "tejas", name: "Tejas", initials: "T",
+    identity: "Full-time engineer · Parent · was a sceptic",
+    headline: "£15–17K by month 4", sub: "from £0 · kept his engineering job",
+    speed: "Zero to five figures in <6 months",
+    tags: ["job", "parent", "beginner"],
+    before: "A full-time engineer with a comfortable, well-paid job — who wanted something that was actually his own rather than relying on an employer.",
+    fear: "\"I didn't know if this was real, fake, or a fraud.\" He almost quit in January when the early problems piled up.",
+    changed: "Krutik launched his first two products for him. Once he'd seen it done right, he replicated the exact process across more products.",
+    facts: { capital: "Started small", time: "~2 hrs/day + weekends", model: "Wholesale", result: "£15–17K by month 4" },
+    quote: "Today's the youngest you'll ever be. It's never too late.",
+    match: "For the comfortable professional who's done well but wants something of their own.",
+    video: "https://youtu.be/O_h4vOOKld4"
+  },
+  {
+    id: "vigg", name: "Vigg", initials: "V",
+    identity: "Was in IT support · now full-time · scaled biggest",
+    headline: "~£250K a year", sub: "quit the 9-5 and went all-in",
+    speed: "£20K+/mo, then full-time",
+    tags: ["job", "fulltime", "milestone"],
+    before: "A 9-5 in IT support. He'd watched the videos for two years and even tried it alone first before committing properly.",
+    fear: "Fear of doing it wrong on a limited budget — \"am I going to waste this?\" — kept him hesitating for a long time.",
+    changed: "He worked through every research method, leaned into store-scouting, used the supplier scripts, and got data-led with Keepa and 90-day price stability.",
+    facts: { capital: "£1–2K", time: "After work + weekends", model: "Wholesale", result: "~£250K/yr · full-time" },
+    quote: "The more time you put in, the more you get back.",
+    match: "For the prospect whose real dream is escaping the 9-5 one day.",
+    video: "https://youtu.be/7vWh7bjimTo"
+  },
+  {
+    id: "qais", name: "Qais", initials: "Q",
+    identity: "Moved from Afghanistan · Father of 3 · 9-5",
+    headline: "£10.5K in 3 months", sub: "one listing sells 200+ units/mo with no ads",
+    speed: "First sale by month 2",
+    tags: ["job", "parent", "moved", "beginner"],
+    before: "Moved from Afghanistan five years ago. A 9-5 with international organisations, father to three girls, building a future for his kids.",
+    fear: "He'd seen so many people get scammed that he couldn't trust a mentor — and he genuinely had no idea how Amazon even worked.",
+    changed: "Krutik (\"my guru\"), the 5-checks formula, and re-watching the lessons until products came easily. The daily community calls kept him pushing.",
+    facts: { capital: "<£2K", time: "Lunch break + 5–11pm", model: "Wholesale + own listing", result: "£10.5K in 3 months" },
+    quote: "If I have done it, definitely you can do it as well.",
+    match: "For the cautious prospect who's been burned before or is scared of being scammed.",
+    video: "https://youtu.be/UFHOTwjeRhU"
+  },
+  {
+    id: "sufyan", name: "Sufiyan", initials: "S",
+    identity: "Full-time job · failed at this before",
+    headline: "£45K in year one", sub: "£8K net profit · alongside his job",
+    speed: "First stable income within weeks",
+    tags: ["job", "tried", "beginner"],
+    before: "A full-time worker who'd heard about FBA back in 2020, gave up, then paid another mentor that didn't work out.",
+    fear: "He'd already tried and failed — twice — so the obvious fear was \"what if it doesn't work for me again?\"",
+    changed: "A done-for-you listing gave him his first stable income and the belief that it actually works — then he built out his own niche bundles.",
+    facts: { capital: "Started small", time: "2 hrs/day", model: "Niche bundles", result: "£45K yr 1 · £8K profit" },
+    quote: "You can either make money, or you can make excuses.",
+    match: "For the prospect who's failed at this before and assumes it won't work for them.",
+    video: "https://youtu.be/UrmbUZK17E8"
+  },
+  {
+    id: "dixa", name: "Dixa", initials: "D",
+    identity: "Moved from India · Parent · supply-chain job",
+    headline: "£10K+ in 3.5 months", sub: "10 products · winning the buy box",
+    speed: "Company registered to £10K in ~3 months",
+    tags: ["job", "parent", "moved", "tried"],
+    before: "Moved from India in 2020. A supply-chain professional and mum to a 10-year-old — who'd once packed orders for an Amazon seller and registered a company in 2022 before stopping.",
+    fear: "She thought it might be fake. Naturally analytical, she needed everything black-and-white before she'd commit a penny.",
+    changed: "She watched the lessons 4–5 times, took detailed notes, and followed the 5 checks precisely — no expensive software needed.",
+    facts: { capital: "Started small", time: "Alongside job", model: "Wholesale", result: "£10K+ in 3.5 months" },
+    quote: "We have only one life. Fail or pass — let's try.",
+    match: "For the analytical prospect who needs everything black-and-white before committing.",
+    video: "https://youtu.be/P5Bf3_1wYHY"
+  },
+  {
+    id: "nisarg", name: "Nisarg", initials: "N",
+    identity: "Based in Canada · data engineer · beginner",
+    headline: "£8.5K by month 4", sub: "on track to leave the 9-5",
+    speed: "£1K day inside the first months",
+    tags: ["job", "beginner"],
+    before: "28, a data-analytics engineer in Canada who'd always wanted to be an entrepreneur — but had never done Amazon and didn't even know what FBA stood for.",
+    fear: "He'd spent years finding excuses — no time, no money, too comfortable in the 9-5 — and worried he couldn't stay disciplined.",
+    changed: "The 50-day challenge gave him structure and discipline, plus money-saving tactics on boxes and shipping he'd never seen anywhere else.",
+    facts: { capital: "Started small", time: "Alongside job", model: "Arbitrage", result: "£8.5K by month 4" },
+    quote: "This isn't get-rich-quick. Treat it like a real business.",
+    match: "For the prospect overseas, or worried they can't keep themselves disciplined.",
+    video: "https://youtu.be/qHFjxECAm6w"
+  },
+  {
+    id: "simon", name: "Simon", initials: "S",
+    identity: "25 · cleaning-firm manager · UK · beginner",
+    headline: "£0 → £10K in 3 months", sub: "just 10–15 hours a week",
+    speed: "£800 → £2.7K → £10K, months 1–3",
+    tags: ["job", "beginner"],
+    before: "25, a manager at a contract-cleaning firm in South Wales, with zero Amazon experience when he started.",
+    fear: "So many people out there selling courses — the hard part was knowing which one was actually the right one to trust.",
+    changed: "Structured mentoring and on-demand support took him from £800 in month one to a projected £10K month by month three.",
+    facts: { capital: "Started small", time: "10–15 hrs/week", model: "Wholesale", result: "£10K by month 3" },
+    quote: "Take the leap of faith.",
+    match: "For the UK 9-5er who just wants a clear, guided start they can trust.",
+    video: "https://youtu.be/2FrX0CiC_IY"
+  },
+  {
+    id: "michael", name: "Michael", initials: "M",
+    identity: "Started at 19 · apprenticeship · no uni",
+    headline: "£100K by month 10", sub: "now moving into private label",
+    speed: "Six figures inside year one",
+    tags: ["young", "beginner", "milestone"],
+    before: "Joined at 19 while doing a digital-marketing apprenticeship — no university, and Amazon was his first ever business.",
+    fear: "Taking action for the first time at 19, instead of just watching the videos like everyone else who never starts.",
+    changed: "The A-to-Z course structure built momentum step by step. He's now expanding into private label with his own registered trademark.",
+    facts: { capital: "Started small", time: "Alongside apprenticeship", model: "Wholesale → private label", result: "£100K by month 10" },
+    quote: "Same info, two people — one does the numbers. It's mindset.",
+    match: "For the under-25 prospect wondering whether their age is a problem.",
+    video: "https://youtu.be/s66yuBSOO9k"
+  },
+  {
+    id: "umar", name: "Umar", initials: "U",
+    identity: "M&S job · ex-Shopify & eBay · never saw profit",
+    headline: "£10K in month 1", sub: "now ~£20K/mo · six figures total",
+    speed: "£10K in the very first month",
+    tags: ["job", "ecom", "tried"],
+    before: "Working at M&S after a Shopify attempt and an eBay side hustle that made revenue but, after all the costs, no real profit.",
+    fear: "He'd been burned by Shopify and eBay — revenue with nothing left over — and wasn't sure Amazon would be any different.",
+    changed: "He watched the content, implemented fast (he already had a company set up), and learned to play wholesalers against each other on price.",
+    facts: { capital: "Started small", time: "Alongside M&S job", model: "Wholesale + brands", result: "£10K month 1 · ~£20K/mo" },
+    quote: "I made £10,000 in my first month on Amazon.",
+    match: "For the prospect who's done eBay or Shopify and never saw real profit come through.",
+    video: "https://youtu.be/z317vuImRbo"
+  }
+];
+
+const FILTERS = [
+  { key: "all", label: "All stories" },
+  { key: "job", label: "Working a 9-5" },
+  { key: "parent", label: "Parent" },
+  { key: "young", label: "Under 25" },
+  { key: "moved", label: "Moved to the UK" },
+  { key: "beginner", label: "Total beginner" },
+  { key: "tried", label: "Failed before" },
+  { key: "ecom", label: "Did eBay / Shopify" },
+  { key: "milestone", label: "Hit £100K+" },
+  { key: "fulltime", label: "Went full-time" }
+];
+
+</script>
+<script>
+  const grid=document.getElementById('grid');
+  const filterRow=document.getElementById('filterRow');
+  const overlay=document.getElementById('overlay');
+  const modal=document.getElementById('modal');
+  const empty=document.getElementById('empty');
+  const gridCount=document.getElementById('gridCount');
+  let active="all";
+  const tagLabels={job:"9-5 job",parent:"Parent",young:"Under 25",moved:"Moved to UK",beginner:"Beginner",tried:"Failed before",ecom:"Ex eBay/Shopify",milestone:"\u00A3100K+",fulltime:"Went full-time"};
+
+  function counts(){const c={all:STUDENTS.length};STUDENTS.forEach(s=>s.tags.forEach(t=>c[t]=(c[t]||0)+1));return c;}
+
+  function renderFilters(){
+    const c=counts();
+    filterRow.innerHTML=FILTERS.map(f=>{
+      const n=f.key==="all"?c.all:(c[f.key]||0);
+      return `<button class="chip ${f.key===active?'active':''}" data-k="${f.key}">${f.label}<span class="ct">${n}</span></button>`;
+    }).join('');
+    filterRow.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{active=b.dataset.k;renderFilters();renderGrid();});
+  }
+
+  function renderGrid(){
+    const list=active==="all"?STUDENTS:STUDENTS.filter(s=>s.tags.includes(active));
+    gridCount.textContent="("+list.length+")";
+    empty.style.display=list.length?"none":"block";
+    grid.innerHTML=list.map(s=>`
+      <div class="card" data-id="${s.id}">
+        <div class="card-top">
+          <div class="avatar">${s.initials}</div>
+          <div class="ci"><div class="card-name">${s.name}</div><div class="card-id">${s.identity}</div></div>
+          <div class="arrow">&rarr;</div>
+        </div>
+        <div class="speed">&#9656; ${s.speed}</div>
+        <div class="result-band">
+          <div class="big">${s.headline.replace(/(\u00A3[\d.,\u2013-]*\d|\u00A30|\u00A3[\d.,]+K)/g,'<span class="g">$1</span>')}</div>
+          <div class="small">${s.sub}</div>
+        </div>
+        <div class="tagrow">${s.tags.map(t=>`<span class="tag">${tagLabels[t]||t}</span>`).join('')}</div>
+      </div>`).join('');
+    grid.querySelectorAll('.card').forEach(c=>c.onclick=()=>openModal(c.dataset.id));
+  }
+
+  function openModal(id){
+    const s=STUDENTS.find(x=>x.id===id);
+    modal.innerHTML=`
+      <div class="m-hero">
+        <button class="m-close" id="mClose">&times;</button>
+        <div class="m-top">
+          <div class="m-avatar">${s.initials}</div>
+          <div><div class="m-name">${s.name}</div><div class="m-id">${s.identity}</div></div>
+        </div>
+        <div class="m-result"><span class="big">${s.headline}</span><span class="sub">${s.sub}</span></div>
+        <div class="m-speed">&#9656; ${s.speed}</div>
+      </div>
+      <div class="m-body">
+        <div class="block"><div class="lbl">Where ${s.name.split(' ')[0]} started</div><p>${s.before}</p></div>
+        <div class="block fear"><div class="lbl">The fear holding them back</div><p>${s.fear}</p></div>
+        <div class="block changed"><div class="lbl">What changed</div><p>${s.changed}</p></div>
+        <div class="facts">
+          <div class="fact"><div class="fl">Starting capital</div><div class="fv">${s.facts.capital}</div></div>
+          <div class="fact"><div class="fl">Time commitment</div><div class="fv">${s.facts.time}</div></div>
+          <div class="fact"><div class="fl">Model</div><div class="fv">${s.facts.model}</div></div>
+          <div class="fact win"><div class="fl">Result</div><div class="fv">${s.facts.result}</div></div>
+        </div>
+        <div class="quote"><span class="mark">&ldquo;</span><p>${s.quote}</p></div>
+        <a class="watch" href="${s.video}" target="_blank" rel="noopener"><span class="play">&#9654;</span> Watch ${s.name.split(' ')[0]}'s full story</a>
+      </div>`;
+    overlay.classList.add('show');
+    document.body.style.overflow='hidden';
+    document.getElementById('mClose').onclick=closeModal;
+  }
+  function closeModal(){overlay.classList.remove('show');document.body.style.overflow='';}
+  overlay.onclick=e=>{if(e.target===overlay)closeModal();};
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+  renderFilters();renderGrid();
+</script>
+</body>
+</html>
